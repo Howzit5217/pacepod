@@ -791,6 +791,7 @@ document.getElementById('gear').addEventListener('click', () => {
   sheet.hidden = false;
 });
 document.getElementById('done').addEventListener('click', () => {
+  closeChoices();
   sheet.hidden = true;
 });
 sheet.addEventListener('click', (e) => {
@@ -911,17 +912,59 @@ for (const group of document.querySelectorAll('.seg[data-key]')) {
   });
 }
 
+/**
+ * A drop-down in the app's look, under [anchor] and lined up with its right edge (above it when there's no room
+ * below). [onPick] gets the index of the choice tapped.
+ */
+const choiceMenu = document.getElementById('choiceMenu');
+
+function openChoices(anchor, names, current, onPick) {
+  choiceMenu.replaceChildren(
+    ...names.map((name, i) => {
+      const row = document.createElement('button');
+      row.textContent = name;
+      row.setAttribute('role', 'option');
+      row.setAttribute('aria-selected', String(i === current));
+      row.classList.toggle('on', i === current);
+      row.addEventListener('click', () => {
+        closeChoices();
+        onPick(i);
+      });
+      return row;
+    }),
+  );
+  choiceMenu.hidden = false;
+  const a = anchor.getBoundingClientRect();
+  const m = choiceMenu.getBoundingClientRect();
+  const below = a.bottom + 4;
+  choiceMenu.style.top = (below + m.height <= window.innerHeight - 8 ? below : Math.max(8, a.top - 4 - m.height)) + 'px';
+  choiceMenu.style.left = Math.max(8, Math.min(a.right - m.width, window.innerWidth - m.width - 8)) + 'px';
+}
+
+function closeChoices() {
+  choiceMenu.hidden = true;
+}
+
+document.addEventListener('pointerdown', (e) => {
+  if (!choiceMenu.hidden && !choiceMenu.contains(e.target)) closeChoices();
+}, true);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeChoices();
+});
+sheet.addEventListener('scroll', closeChoices); // it's placed on the screen, so it shouldn't stay behind
+
 for (const [id, key, kind] of [
   ['fastSound', 'fastSound', Kind.OVER],
   ['slowSound', 'slowSound', Kind.SLOW],
 ]) {
-  const select = document.getElementById(id);
-  SOUND_NAMES.forEach((name, i) => select.add(new Option(name, String(i))));
-  select.addEventListener('change', () => {
-    settings[key] = Number(select.value);
-    save();
-    alerts.unlock();
-    alerts.play(kind, 'sound');
+  const button = document.getElementById(id);
+  button.addEventListener('click', () => {
+    alerts.unlock(); // a tap: lets the sound play
+    openChoices(button, SOUND_NAMES, settings[key], (i) => {
+      settings[key] = i;
+      save();
+      alerts.play(kind, 'sound');
+    });
   });
 }
 
@@ -940,8 +983,8 @@ function showSettings() {
   document.getElementById('slowValue').textContent = s.slowBelow > 0 ? speedLabel(s.slowBelow) : 'Off';
   document.getElementById('fromValue').textContent = s.slowBelow > 0 ? speedLabel(slowFrom(s)) : '–';
   document.getElementById('fromRow').classList.toggle('faded', s.slowBelow <= 0);
-  document.getElementById('fastSound').value = String(s.fastSound);
-  document.getElementById('slowSound').value = String(s.slowSound);
+  document.getElementById('fastSound').textContent = SOUND_NAMES[s.fastSound] || SOUND_NAMES[0];
+  document.getElementById('slowSound').textContent = SOUND_NAMES[s.slowSound] || SOUND_NAMES[0];
   const sound = s.alertWith !== 'buzz';
   document.getElementById('fastSoundRow').hidden = !sound;
   document.getElementById('slowSoundRow').hidden = !sound;

@@ -57,6 +57,21 @@
         </div>
       </div>
       <div class="box">
+        <h3>Too slow</h3>
+        <div class="row" id="fromRow">
+          <span class="label">From</span>
+          <button class="round" id="fromMinus" aria-label="Lower the slow zone's start">−</button>
+          <span class="value" id="fromValue"></span>
+          <button class="round" id="fromPlus" aria-label="Raise the slow zone's start">+</button>
+        </div>
+        <div class="row">
+          <span class="label">Up to</span>
+          <button class="round" id="slowMinus" aria-label="Lower the too-slow speed">−</button>
+          <span class="value" id="slowValue"></span>
+          <button class="round" id="slowPlus" aria-label="Raise the too-slow speed">+</button>
+        </div>
+      </div>
+      <div class="box">
         <div class="row">
           <span class="label">Units</span>
           <div class="seg" data-key="kmh"><button data-v="false">mph</button><button data-v="true">km/h</button></div>
@@ -77,36 +92,25 @@
           <span class="label">Alert with</span>
           <div class="seg" data-key="alertWith"><button data-v="buzz">Buzz</button><button data-v="sound">Sound</button><button data-v="both">Both</button></div>
         </div>
-        <h3>Too fast</h3>
         <div class="row" id="fastSoundRow">
-          <span class="label">Sound</span>
-          <select id="fastSound" class="soft" aria-label="Too-fast sound"></select>
+          <span class="label">Too fast sound</span>
+          <button id="fastSound" class="soft dropdown" aria-haspopup="listbox" aria-label="Too-fast sound"></button>
         </div>
         <div class="row">
           <span class="label">Also at yellow</span>
           <div class="seg" data-key="atYellow"><button data-v="false">Off</button><button data-v="true">On</button></div>
         </div>
-        <h3>Too slow</h3>
-        <div class="row" id="fromRow">
-          <span class="label">From</span>
-          <button class="round" id="fromMinus" aria-label="Lower the slow zone's start">−</button>
-          <span class="value" id="fromValue"></span>
-          <button class="round" id="fromPlus" aria-label="Raise the slow zone's start">+</button>
-        </div>
-        <div class="row">
-          <span class="label">Up to</span>
-          <button class="round" id="slowMinus" aria-label="Lower the too-slow speed">−</button>
-          <span class="value" id="slowValue"></span>
-          <button class="round" id="slowPlus" aria-label="Raise the too-slow speed">+</button>
-        </div>
         <div class="row" id="slowSoundRow">
-          <span class="label">Sound</span>
-          <select id="slowSound" class="soft" aria-label="Too-slow sound"></select>
+          <span class="label">Too slow sound</span>
+          <button id="slowSound" class="soft dropdown" aria-haspopup="listbox" aria-label="Too-slow sound"></button>
         </div>
       </div>
       <div class="done-row"><button id="done" class="green">Done</button></div>
     </div>
   </div>
+
+  <!-- The sound drop-downs, in the app's look (a phone's own picker can't take it). -->
+  <div id="choiceMenu" class="choice-menu" role="listbox" hidden></div>
 
   <script src="app.js"></script>
 </body>
