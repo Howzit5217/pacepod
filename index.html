@@ -162,28 +162,59 @@
 
     .card p { margin: 0 0 10px; }
 
-    ul.what {
-      margin: 0;
-      padding: 0;
-      list-style: none;
+    .features {
       display: grid;
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
-    ul.what li {
-      padding-left: 22px;
+    .feature {
+      padding: 18px 18px 16px;
+      background: var(--cream-dark);
+      border-radius: 24px;
+    }
+
+    .feature.wide { grid-column: 1 / -1; }
+
+    .feature h3 {
+      margin: 10px 0 4px;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .feature p { margin: 0; font-size: 15px; }
+
+    /* A small green bubble, like the game's buttons, around each icon. */
+    .badge {
       position: relative;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1.5px solid #4cc688;
+      border-radius: 50%;
+      background: linear-gradient(#2c8a55, #165c39 50%, #34be80);
     }
 
-    ul.what li::before {
+    .badge::after {
       content: "";
       position: absolute;
-      left: 2px;
-      top: 0.55em;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--green);
+      left: 18%;
+      right: 18%;
+      top: 2px;
+      height: 40%;
+      border-radius: 100px;
+      background: linear-gradient(rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0));
+    }
+
+    .badge svg { width: 22px; height: 22px; fill: #fff; }
+
+    main a {
+      color: var(--green-dark);
+      font-weight: 800;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
     }
 
     ol {
@@ -219,6 +250,10 @@
       .lead { font-size: 16px; }
       .button { width: 100%; justify-content: center; }
     }
+
+    @media (max-width: 560px) {
+      .features { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -234,25 +269,39 @@
       </a>
       <a class="button soft" href="app/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.77-2.23a9.8 9.8 0 0 0 1.25-2.58c-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.64-.77 1.06-1.83.95-2.9-.91.04-2 .6-2.66 1.37-.58.67-1.1 1.75-.96 2.8 1.01.08 2.04-.51 2.67-1.27z"/></svg>
-        iPhone and computers
+        iPhone
       </a>
     </div>
-    <p class="version">Version 1.0.1 · <a href="https://github.com/Howzit5217/pacepod/releases">all versions</a></p>
+    <p class="version">Version 1.0.2 · <a href="https://github.com/Howzit5217/pacepod/releases">all versions</a></p>
   </header>
 
   <main>
-    <section class="card">
-      <h2>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a9 9 0 0 0-7.8 13.5l1.7-1A7 7 0 1 1 19 12a6.9 6.9 0 0 1-.94 3.5l1.73 1A9 9 0 0 0 12 4zm4.2 4.1-5.1 3.5a1.6 1.6 0 1 0 2.1 2.1z"/></svg>
-        What it does
-      </h2>
-      <ul class="what">
-        <li>A glassy speed pill, like the game’s own buttons, that sits over Pikmin Bloom (or any app you pick) and gets out of the way when you leave.</li>
-        <li>Green while you’re fine, yellow as you near your top speed, red past it, and yellow again if you’re riding slower than you’d like.</li>
-        <li>Speed alerts you can hear or feel: a buzz, one of four sounds or your own, and a buzz on your Galaxy Watch, so you don’t have to look.</li>
-        <li>Choose mph or km/h and 0, 0.0 or 0.00. Eco mode saves battery.</li>
-        <li>Your location stays on your phone. PacePod doesn’t send it anywhere.</li>
-      </ul>
+    <section class="features" aria-label="What it does">
+      <div class="feature">
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5-10-5zm-8.6 9.3L2 13l10 5 10-5-1.4-.7L12 16l-8.6-3.7z"/></svg></span>
+        <h3>Floats over your game</h3>
+        <p>Sits over Pikmin Bloom, or any app you pick, and gets out of the way when you leave it.</p>
+      </div>
+      <div class="feature">
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a9 9 0 0 0-7.8 13.5l1.7-1A7 7 0 1 1 19 12a6.9 6.9 0 0 1-.94 3.5l1.73 1A9 9 0 0 0 12 4zm4.2 4.1-5.1 3.5a1.6 1.6 0 1 0 2.1 2.1z"/></svg></span>
+        <h3>Colours at a glance</h3>
+        <p>Green while you’re fine, yellow near your top speed, red past it, and yellow again when you’re riding too slowly.</p>
+      </div>
+      <div class="feature">
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm7-6v-5a7 7 0 0 0-5.5-6.84V3.5a1.5 1.5 0 0 0-3 0v.66A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2z"/></svg></span>
+        <h3>Alerts you hear or feel</h3>
+        <p>A buzz, one of four sounds or your own, from the phone or Bluetooth, and a buzz on your Galaxy Watch.</p>
+      </div>
+      <div class="feature">
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg></span>
+        <h3>Set it your way</h3>
+        <p>mph or km/h, 0, 0.0 or 0.00, how see-through it is, and an Eco mode that saves battery.</p>
+      </div>
+      <div class="feature wide">
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5.25 3.4 10.15 8 11 4.6-.85 8-5.75 8-11V5l-8-3zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.8-4.8 1.4 1.4-6.2 6.2z"/></svg></span>
+        <h3>Private</h3>
+        <p>Your location stays on your phone. PacePod doesn’t send it anywhere.</p>
+      </div>
     </section>
 
     <section class="card" id="android">
@@ -272,7 +321,7 @@
     <section class="card" id="iphone">
       <h2>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.77-2.23a9.8 9.8 0 0 0 1.25-2.58c-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.64-.77 1.06-1.83.95-2.9-.91.04-2 .6-2.66 1.37-.58.67-1.1 1.75-.96 2.8 1.01.08 2.04-.51 2.67-1.27z"/></svg>
-        iPhone and computers
+        iPhone
       </h2>
       <ol>
         <li>Open <a href="app/"><b>PacePod for the web</b></a> in Safari.</li>
