@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>PacePod</title>
+  <meta name="description" content="A little speedometer pill for riding with Pikmin Bloom.">
+  <meta name="theme-color" content="#56735D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PacePod">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <main class="stage">
+    <canvas id="pill" role="img" aria-label="Speed"></canvas>
+    <p id="status" class="status" hidden></p>
+  </main>
+
+  <button id="gear" class="gear" aria-label="Settings">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.62l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.63-.94l-.36-2.54a.48.48 0 0 0-.48-.4h-3.84a.48.48 0 0 0-.48.4l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96a.49.49 0 0 0-.59.22L2.71 8.86a.48.48 0 0 0 .12.62l2.03 1.58a7.4 7.4 0 0 0 0 1.88l-2.03 1.58a.49.49 0 0 0-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54c.05.24.25.4.48.4h3.84c.24 0 .44-.16.48-.4l.36-2.54a7.03 7.03 0 0 0 1.63-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.62l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
+  </button>
+
+  <!-- First tap: Safari only asks for location, plays sound and keeps the screen on after one. -->
+  <div id="start" class="overlay">
+    <div class="card start-card">
+      <img src="apple-touch-icon.png" alt="" class="start-icon">
+      <h1>PacePod</h1>
+      <p>Your speed, from your phone’s GPS. It stays on this phone and never goes anywhere.</p>
+      <button id="startButton" class="green big">Start</button>
+      <p id="homeHint" class="hint" hidden>Tip: tap <b>Share</b>, then <b>Add to Home Screen</b>, to open it full screen like an app.</p>
+    </div>
+  </div>
+
+  <div id="sheet" class="overlay" hidden>
+    <div class="card sheet-card" role="dialog" aria-label="Settings">
+      <div class="row title-row"><h2>Speed</h2></div>
+      <div class="box">
+        <div class="row">
+          <span class="label">Top speed</span>
+          <button class="round" id="limitMinus" aria-label="Lower top speed">−</button>
+          <span class="value" id="limitValue"></span>
+          <button class="round" id="limitPlus" aria-label="Raise top speed">+</button>
+        </div>
+        <div class="row" id="warnRow">
+          <span class="label">Yellow at<small id="warnHint"></small></span>
+          <button class="round" id="warnMinus" aria-label="Turn yellow sooner">−</button>
+          <span class="value" id="warnValue"></span>
+          <button class="round" id="warnPlus" aria-label="Turn yellow later">+</button>
+        </div>
+      </div>
+      <div class="box">
+        <div class="row">
+          <span class="label">Units</span>
+          <div class="seg" data-key="kmh"><button data-v="false">mph</button><button data-v="true">km/h</button></div>
+        </div>
+        <div class="row">
+          <span class="label">Decimals</span>
+          <div class="seg" data-key="decimals"><button data-v="0">0</button><button data-v="1">0.0</button><button data-v="2">0.00</button></div>
+        </div>
+      </div>
+
+      <div class="row title-row">
+        <h2>Speed alerts</h2>
+        <div class="seg" data-key="alerts"><button data-v="false">Off</button><button data-v="true">On</button></div>
+      </div>
+      <p id="needSpeed" class="note">Set a top speed, or a too-slow speed, for alerts to go by.</p>
+      <div class="box">
+        <div class="row" id="withRow">
+          <span class="label">Alert with</span>
+          <div class="seg" data-key="alertWith"><button data-v="buzz">Buzz</button><button data-v="sound">Sound</button><button data-v="both">Both</button></div>
+        </div>
+        <h3>Too fast</h3>
+        <div class="row" id="fastSoundRow">
+          <span class="label">Sound</span>
+          <select id="fastSound" class="soft" aria-label="Too-fast sound"></select>
+        </div>
+        <div class="row">
+          <span class="label">Also at yellow</span>
+          <div class="seg" data-key="atYellow"><button data-v="false">Off</button><button data-v="true">On</button></div>
+        </div>
+        <h3>Too slow</h3>
+        <div class="row" id="fromRow">
+          <span class="label">From</span>
+          <button class="round" id="fromMinus" aria-label="Lower the slow zone's start">−</button>
+          <span class="value" id="fromValue"></span>
+          <button class="round" id="fromPlus" aria-label="Raise the slow zone's start">+</button>
+        </div>
+        <div class="row">
+          <span class="label">Up to</span>
+          <button class="round" id="slowMinus" aria-label="Lower the too-slow speed">−</button>
+          <span class="value" id="slowValue"></span>
+          <button class="round" id="slowPlus" aria-label="Raise the too-slow speed">+</button>
+        </div>
+        <div class="row" id="slowSoundRow">
+          <span class="label">Sound</span>
+          <select id="slowSound" class="soft" aria-label="Too-slow sound"></select>
+        </div>
+      </div>
+      <div class="done-row"><button id="done" class="green">Done</button></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
