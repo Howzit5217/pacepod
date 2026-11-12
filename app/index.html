@@ -20,11 +20,11 @@
 </head>
 <body>
   <main class="stage">
-    <canvas id="pill" role="img" aria-label="Speed"></canvas>
+    <canvas id="pill" role="img" data-t-aria="pill_description" aria-label="Speedometer"></canvas>
     <p id="status" class="status" hidden></p>
   </main>
 
-  <button id="gear" class="gear" aria-label="Settings">
+  <button id="gear" class="gear" data-t-aria="settings" aria-label="Settings">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.62l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.63-.94l-.36-2.54a.48.48 0 0 0-.48-.4h-3.84a.48.48 0 0 0-.48.4l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96a.49.49 0 0 0-.59.22L2.71 8.86a.48.48 0 0 0 .12.62l2.03 1.58a7.4 7.4 0 0 0 0 1.88l-2.03 1.58a.49.49 0 0 0-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54c.05.24.25.4.48.4h3.84c.24 0 .44-.16.48-.4l.36-2.54a7.03 7.03 0 0 0 1.63-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.62l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
   </button>
 
@@ -33,85 +33,92 @@
     <div class="card start-card">
       <img src="apple-touch-icon.png" alt="" class="start-icon">
       <h1>PacePod</h1>
-      <p>Your speed, from your phone’s GPS. It stays on this phone and never goes anywhere.</p>
-      <button id="startButton" class="green big">Start</button>
-      <p id="homeHint" class="hint" hidden>Tip: tap <b>Share</b>, then <b>Add to Home Screen</b>, to open it full screen like an app.</p>
+      <p data-t="start_text">Your speed, from your phone’s GPS. It stays on this phone and never goes anywhere.</p>
+      <button id="startButton" class="green big" data-t="start">Start</button>
+      <p id="homeHint" class="hint" data-t-html="home_hint" hidden>Tip: tap <b>Share</b>, then <b>Add to Home Screen</b>, to open it full screen like an app.</p>
     </div>
   </div>
 
   <div id="sheet" class="overlay" hidden>
-    <div class="card sheet-card" role="dialog" aria-label="Settings">
-      <div class="row title-row"><h2>Speed</h2></div>
+    <div class="card sheet-card" role="dialog" data-t-aria="settings" aria-label="Settings">
+      <div class="row title-row"><h2 data-t="speed_title">Speed</h2></div>
       <div class="box">
         <div class="row">
-          <span class="label">Top speed</span>
-          <button class="round" id="limitMinus" aria-label="Lower top speed">−</button>
+          <span class="label" data-t="top_speed">Top speed</span>
+          <button class="round" id="limitMinus" data-t-aria="limit_down" aria-label="Lower top speed">−</button>
           <span class="value" id="limitValue"></span>
-          <button class="round" id="limitPlus" aria-label="Raise top speed">+</button>
+          <button class="round" id="limitPlus" data-t-aria="limit_up" aria-label="Raise top speed">+</button>
         </div>
         <div class="row" id="warnRow">
-          <span class="label">Yellow at<small id="warnHint"></small></span>
-          <button class="round" id="warnMinus" aria-label="Turn yellow sooner">−</button>
+          <span class="label"><span data-t="warn_at">Yellow at</span><small id="warnHint"></small></span>
+          <button class="round" id="warnMinus" data-t-aria="warn_down" aria-label="Turn yellow sooner">−</button>
           <span class="value" id="warnValue"></span>
-          <button class="round" id="warnPlus" aria-label="Turn yellow later">+</button>
+          <button class="round" id="warnPlus" data-t-aria="warn_up" aria-label="Turn yellow later">+</button>
         </div>
       </div>
       <div class="box">
-        <h3>Too slow</h3>
+        <h3 data-t="too_slow">Too slow</h3>
         <div class="row" id="fromRow">
-          <span class="label">From</span>
-          <button class="round" id="fromMinus" aria-label="Lower the slow zone's start">−</button>
+          <span class="label" data-t="slow_from">From</span>
+          <button class="round" id="fromMinus" data-t-aria="slow_from_down" aria-label="Start the slow zone lower">−</button>
           <span class="value" id="fromValue"></span>
-          <button class="round" id="fromPlus" aria-label="Raise the slow zone's start">+</button>
+          <button class="round" id="fromPlus" data-t-aria="slow_from_up" aria-label="Start the slow zone higher">+</button>
         </div>
         <div class="row">
-          <span class="label">Up to</span>
-          <button class="round" id="slowMinus" aria-label="Lower the too-slow speed">−</button>
+          <span class="label" data-t="slow_up_to">Up to</span>
+          <button class="round" id="slowMinus" data-t-aria="slow_down" aria-label="Lower the speed-up speed">−</button>
           <span class="value" id="slowValue"></span>
-          <button class="round" id="slowPlus" aria-label="Raise the too-slow speed">+</button>
+          <button class="round" id="slowPlus" data-t-aria="slow_up" aria-label="Raise the speed-up speed">+</button>
         </div>
       </div>
       <div class="box">
         <div class="row">
-          <span class="label">Units</span>
+          <span class="label" data-t="units">Units</span>
           <div class="seg" data-key="kmh"><button data-v="false">mph</button><button data-v="true">km/h</button></div>
         </div>
         <div class="row">
-          <span class="label">Decimals</span>
+          <span class="label" data-t="decimals">Decimals</span>
           <div class="seg" data-key="decimals"><button data-v="0">0</button><button data-v="1">0.0</button><button data-v="2">0.00</button></div>
         </div>
       </div>
 
       <div class="row title-row">
-        <h2>Speed alerts</h2>
-        <div class="seg" data-key="alerts"><button data-v="false">Off</button><button data-v="true">On</button></div>
+        <h2 data-t="alerts_title">Speed alerts</h2>
+        <div class="seg" data-key="alerts"><button data-v="false" data-t="off">Off</button><button data-v="true" data-t="on">On</button></div>
       </div>
-      <p id="needSpeed" class="note">Set a top speed, or a too-slow speed, for alerts to go by.</p>
+      <p id="needSpeed" class="note" data-t="need_speed">Set a top speed, or a too-slow speed, for alerts to go by.</p>
       <div class="box">
         <div class="row" id="withRow">
-          <span class="label">Alert with</span>
-          <div class="seg" data-key="alertWith"><button data-v="buzz">Buzz</button><button data-v="sound">Sound</button><button data-v="both">Both</button></div>
+          <span class="label" data-t="alert_with">Alert with</span>
+          <div class="seg" data-key="alertWith"><button data-v="buzz" data-t="with_buzz">Buzz</button><button data-v="sound" data-t="with_sound">Sound</button><button data-v="both" data-t="with_both">Both</button></div>
         </div>
         <div class="row" id="fastSoundRow">
-          <span class="label">Too fast sound</span>
-          <button id="fastSound" class="soft dropdown" aria-haspopup="listbox" aria-label="Too-fast sound"></button>
+          <span class="label" data-t="fast_sound_label">Too fast sound</span>
+          <button id="fastSound" class="soft dropdown" aria-haspopup="listbox" data-t-aria="fast_sound_label" aria-label="Too fast sound"></button>
         </div>
         <div class="row">
-          <span class="label">Also at yellow</span>
-          <div class="seg" data-key="atYellow"><button data-v="false">Off</button><button data-v="true">On</button></div>
+          <span class="label" data-t="alert_yellow">Also at yellow</span>
+          <div class="seg" data-key="atYellow"><button data-v="false" data-t="off">Off</button><button data-v="true" data-t="on">On</button></div>
         </div>
         <div class="row" id="slowSoundRow">
-          <span class="label">Too slow sound</span>
-          <button id="slowSound" class="soft dropdown" aria-haspopup="listbox" aria-label="Too-slow sound"></button>
+          <span class="label" data-t="slow_sound_label">Too slow sound</span>
+          <button id="slowSound" class="soft dropdown" aria-haspopup="listbox" data-t-aria="slow_sound_label" aria-label="Too slow sound"></button>
         </div>
       </div>
-      <div class="done-row"><button id="done" class="green">Done</button></div>
+      <div class="box">
+        <div class="row">
+          <span class="label" data-t="language_label">Language</span>
+          <button id="language" class="soft dropdown" aria-haspopup="listbox" data-t-aria="language_label" aria-label="Language"></button>
+        </div>
+      </div>
+      <div class="done-row"><button id="done" class="green" data-t="done">Done</button></div>
     </div>
   </div>
 
   <!-- The sound drop-downs, in the app's look (a phone's own picker can't take it). -->
   <div id="choiceMenu" class="choice-menu" role="listbox" hidden></div>
 
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

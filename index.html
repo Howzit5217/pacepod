@@ -89,6 +89,7 @@
 
     .button {
       position: relative;
+      overflow: hidden; /* keeps the shine inside the rounded ends */
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -102,31 +103,46 @@
 
     .button svg { width: 24px; height: 24px; fill: currentColor; }
 
-    /* Pikmin Bloom's green bubble button. */
-    .button.green {
-      border: 1.5px solid #4cc688;
-      background: linear-gradient(#2c8a55, #165c39 50%, #34be80);
+    /*
+     * The buttons are made of the PacePod pill's own glass (see PillView in the app): tinted green, clearest under the
+     * shine and the glow, nearly solid in the middle, with a wash of light over the top third, a glow rising from the
+     * bottom edge and a fine line of light around it. The second is the frosted grey of the pill's top-speed bubble.
+     */
+    .button.green,
+    .button.soft {
       color: #fff;
-      text-shadow: 0 1px 1.5px rgba(6, 42, 23, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 14px rgba(20, 40, 28, 0.35);
     }
 
-    .button.green::after {
-      content: "";
-      position: absolute;
-      left: 12%;
-      right: 12%;
-      top: 2px;
-      height: 42%;
-      border-radius: 100px;
-      background: linear-gradient(rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0));
-      pointer-events: none;
+    .button.green {
+      border: 1.5px solid rgba(82, 209, 143, 0.5);
+      background: linear-gradient(rgba(45, 127, 79, 0.8) 0%, rgba(42, 120, 74, 0.78) 8%, rgba(31, 95, 58, 0.82) 32%,
+        rgba(22, 90, 56, 0.92) 42%, rgba(19, 91, 58, 0.95) 55%, rgba(26, 116, 84, 0.92) 67%, rgba(30, 129, 96, 0.86) 77%,
+        rgba(25, 144, 110, 0.8) 86%, rgba(35, 162, 116, 0.82) 92%, rgba(42, 181, 124, 0.9) 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -5px 7px -3px rgba(82, 209, 143, 0.7),
+        0 6px 14px rgba(20, 40, 28, 0.35);
+      text-shadow: 0 1.1px 1.4px rgba(6, 42, 23, 0.55);
     }
 
     .button.soft {
-      border: 1.5px solid rgba(255, 255, 255, 0.7);
-      background: var(--cream);
-      color: var(--ink);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      background: radial-gradient(120% 140% at 50% 50%, rgba(160, 175, 170, 0.84) 0%, rgba(160, 175, 170, 0.9) 45%,
+        rgba(160, 175, 170, 0.94) 100%);
+      text-shadow: 0 0.6px 1.2px rgba(32, 48, 40, 0.6);
     }
+
+    .button.green::after,
+    .button.soft::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 36%;
+      background: linear-gradient(rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.48) 22%, rgba(255, 255, 255, 0.36) 39%,
+        rgba(255, 255, 255, 0.22) 55%, rgba(255, 255, 255, 0.09) 75%, rgba(255, 255, 255, 0) 100%);
+      pointer-events: none;
+    }
+
+    .button:active { filter: brightness(1.08); }
 
     .version {
       margin-top: 14px;
@@ -185,28 +201,32 @@
 
     .feature p { margin: 0; font-size: 15px; }
 
-    /* A small green bubble, like the game's buttons, around each icon. */
+    /* A small bubble of the pill's green glass around each icon. */
     .badge {
       position: relative;
+      overflow: hidden;
       display: grid;
       place-items: center;
       width: 42px;
       height: 42px;
-      border: 1.5px solid #4cc688;
+      border: 1.5px solid rgba(82, 209, 143, 0.5);
       border-radius: 50%;
-      background: linear-gradient(#2c8a55, #165c39 50%, #34be80);
+      background: linear-gradient(rgba(45, 127, 79, 0.8) 0%, rgba(42, 120, 74, 0.78) 8%, rgba(31, 95, 58, 0.82) 32%,
+        rgba(22, 90, 56, 0.92) 42%, rgba(19, 91, 58, 0.95) 55%, rgba(26, 116, 84, 0.92) 67%, rgba(30, 129, 96, 0.86) 77%,
+        rgba(25, 144, 110, 0.8) 86%, rgba(35, 162, 116, 0.82) 92%, rgba(42, 181, 124, 0.9) 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -4px 5px -3px rgba(82, 209, 143, 0.7);
     }
 
     .badge::after {
       content: "";
       position: absolute;
-      left: 18%;
-      right: 18%;
-      top: 2px;
-      height: 40%;
-      border-radius: 100px;
-      background: linear-gradient(rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0));
+      inset: 0 0 auto;
+      height: 36%;
+      background: linear-gradient(rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.48) 22%, rgba(255, 255, 255, 0.36) 39%,
+        rgba(255, 255, 255, 0.22) 55%, rgba(255, 255, 255, 0.09) 75%, rgba(255, 255, 255, 0) 100%);
     }
+
+    .badge svg { position: relative; z-index: 1; }
 
     .badge svg { width: 22px; height: 22px; fill: #fff; }
 
@@ -272,7 +292,7 @@
         iPhone
       </a>
     </div>
-    <p class="version">Version 1.0.2 · <a href="https://github.com/Howzit5217/pacepod/releases">all versions</a></p>
+    <p class="version">Version 1.0.3 · <a href="https://github.com/Howzit5217/pacepod/releases">all versions</a></p>
   </header>
 
   <main>
@@ -284,7 +304,7 @@
       </div>
       <div class="feature">
         <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a9 9 0 0 0-7.8 13.5l1.7-1A7 7 0 1 1 19 12a6.9 6.9 0 0 1-.94 3.5l1.73 1A9 9 0 0 0 12 4zm4.2 4.1-5.1 3.5a1.6 1.6 0 1 0 2.1 2.1z"/></svg></span>
-        <h3>Colours at a glance</h3>
+        <h3>Colors at a glance</h3>
         <p>Green while you’re fine, yellow near your top speed, red past it, and yellow again when you’re riding too slowly.</p>
       </div>
       <div class="feature">
@@ -297,7 +317,12 @@
         <h3>Set it your way</h3>
         <p>mph or km/h, 0, 0.0 or 0.00, how see-through it is, and an Eco mode that saves battery.</p>
       </div>
-      <div class="feature wide">
+      <div class="feature">
+        <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg></span>
+        <h3>In ten languages</h3>
+        <p>The same as Pikmin Bloom: English, Español, Français, Português, Deutsch, Italiano, 日本語, 한국어, 繁體中文 and 简体中文.</p>
+      </div>
+      <div class="feature">
         <span class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5.25 3.4 10.15 8 11 4.6-.85 8-5.75 8-11V5l-8-3zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.8-4.8 1.4 1.4-6.2 6.2z"/></svg></span>
         <h3>Private</h3>
         <p>Your location stays on your phone. PacePod doesn’t send it anywhere.</p>
@@ -328,7 +353,7 @@
         <li>Tap <b>Share</b>, then <b>Add to Home Screen</b>. It opens full screen with its own icon, like an app.</li>
         <li>Tap <b>Start</b> and allow location.</li>
       </ol>
-      <p class="note"><b>On iPhone it can’t float.</b> Apple doesn’t let any app or web page sit on top of other apps, and Safari stops reading your speed once you switch away. So on iPhone PacePod is a full-screen speedometer, with the same pill, colours and alerts, and it keeps your screen on while it’s open. Buzzing needs Android; on iPhone the alerts are sounds.</p>
+      <p class="note"><b>On iPhone it can’t float.</b> Apple doesn’t let any app or web page sit on top of other apps, and Safari stops reading your speed once you switch away. So on iPhone PacePod is a full-screen speedometer, with the same pill, colors and alerts, and it keeps your screen on while it’s open. Buzzing needs Android; on iPhone the alerts are sounds.</p>
     </section>
 
     <p class="fine">PacePod is a fan-made tool. It isn’t made by, or affiliated with, Niantic or Nintendo. · <a href="https://github.com/Howzit5217/pacepod">GitHub</a></p>

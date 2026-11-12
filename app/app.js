@@ -4,9 +4,10 @@
  * speed while the page is open. iPhones don't let anything float over other apps, and Safari stops GPS once you
  * switch away, so here the pill is the whole page, and the page keeps the screen on while it's open.
  *
- * Ported from the Android app: the pill's look (PillView.kt), the colour zones and number formatting
+ * Ported from the Android app: the pill's look (PillView.kt), the color zones and number formatting
  * (SpeedFormat.kt), the speed alerts and when they ring (AlertRules and Buzzer in Alerts.kt) and the Speed and Speed
- * alerts settings. Settings stay on this device; the location never leaves it.
+ * alerts settings. Settings stay on this device; the location never leaves it. It speaks the same ten languages as
+ * the app (i18n.js), the phone's own unless one is picked.
  */
 
 // ---- Speeds and how they show (SpeedFormat.kt). Speeds are kept in mph. ----
@@ -99,6 +100,8 @@ const settings = Object.assign(
     atYellow: false,
     slowBelow: 0,
     slowFrom: -1,
+    /** A tag from LANGS, or 'system' for the phone's language. */
+    language: 'system',
   },
   (() => {
     try {
@@ -109,6 +112,42 @@ const settings = Object.assign(
   })(),
 );
 if (!CAN_BUZZ) settings.alertWith = 'sound';
+
+// ---- Words, in the language picked (or the phone's). ----
+
+/** The phone's first language PacePod has: Portuguese is Brazil's, Chinese by its script (or its region's). */
+function phoneLang() {
+  for (const tag of navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']) {
+    const [base, ...rest] = tag.split('-');
+    const lang = base.toLowerCase();
+    if (lang === 'zh') {
+      const traditional = rest.some((part) => /^(hant|tw|hk|mo)$/i.test(part));
+      return traditional ? 'zh-Hant' : 'zh-Hans';
+    }
+    if (lang === 'pt') return 'pt-BR';
+    const known = LANGS.find(([code]) => code === lang);
+    if (known) return known[0];
+  }
+  return 'en';
+}
+
+function langNow() {
+  return LANGS.some(([code]) => code === settings.language) ? settings.language : phoneLang();
+}
+
+/** The text for [key], with %1$s, %2$s… filled in from [args]. */
+function t(key, ...args) {
+  const text = (STRINGS[langNow()] || STRINGS.en)[key] ?? STRINGS.en[key] ?? key;
+  return text.replace(/%(\d)\$[sd]/g, (_, n) => String(args[Number(n) - 1]));
+}
+
+/** Puts every marked text on the page in the current language. */
+function applyLanguage() {
+  document.documentElement.lang = langNow();
+  for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t);
+  for (const el of document.querySelectorAll('[data-t-html]')) el.innerHTML = t(el.dataset.tHtml); // our own strings
+  for (const el of document.querySelectorAll('[data-t-aria]')) el.setAttribute('aria-label', t(el.dataset.tAria));
+}
 
 function save() {
   try {
@@ -272,8 +311,8 @@ class Pill {
     this.fit();
   }
 
-  /** Still fading from one colour to the next. */
-  get recolouring() {
+  /** Still fading from one color to the next. */
+  get recoloring() {
     return performance.now() - this.blendAt < RECOLOR_MS;
   }
 
@@ -372,10 +411,10 @@ class Pill {
     const gr = iconR * 0.54;
     const gy = cy + iconR * 0.07;
     const band = iconR * 0.17;
-    const arc = (from, sweep, colour, cap) => {
+    const arc = (from, sweep, color, cap) => {
       c.lineWidth = band;
       c.lineCap = cap;
-      c.strokeStyle = css(colour);
+      c.strokeStyle = css(color);
       c.beginPath();
       c.arc(cx, gy, gr, from, from + sweep);
       c.stroke();
@@ -406,21 +445,21 @@ class Pill {
       c.lineTo(cx + Math.cos(a) * (gr + band), gy + Math.sin(a) * (gr + band));
       c.stroke();
     }
-    const needleColour = this.dim ? NEEDLE_DIM : this.zone === Zone.OVER ? p.accent : NEEDLE;
+    const needleColor = this.dim ? NEEDLE_DIM : this.zone === Zone.OVER ? p.accent : NEEDLE;
     const na = START + SWEEP * this.needle;
     c.lineWidth = iconR * 0.15;
     c.lineCap = 'round';
-    c.strokeStyle = css(needleColour);
+    c.strokeStyle = css(needleColor);
     c.beginPath();
     c.moveTo(cx, gy);
     c.lineTo(cx + Math.cos(na) * gr * 0.8, gy + Math.sin(na) * gr * 0.8);
     c.stroke();
-    c.fillStyle = css(needleColour);
+    c.fillStyle = css(needleColor);
     c.beginPath();
     c.arc(cx, gy, iconR * 0.14, 0, Math.PI * 2);
     c.fill();
 
-    // "18.4 mph", centred between the badge and the bubble.
+    // "18.4 mph", centered between the badge and the bubble.
     const ax = cx + iconR + this.gap;
     const bx = margin + w - this.right;
     const x0 = ax + (bx - ax - (this.slot + this.unitGap + this.unitW)) / 2;
@@ -555,7 +594,8 @@ class AlertRules {
 // ---- Playing them: a buzz (on phones that can) and/or a sound. ----
 
 const SOUND_SETS = ['sparkle', 'arcade', 'bubbles', 'marimba'];
-const SOUND_NAMES = ['Sparkle', 'Arcade', 'Bubbles', 'Marimba'];
+const SOUND_KEYS = ['sound_sparkle', 'sound_arcade', 'sound_bubbles', 'sound_marimba'];
+const soundNames = () => SOUND_KEYS.map((key) => t(key));
 const SOUND_MS = 2000;
 // Off/on pairs in ms, from the Android app's buzzes (the web can't set how hard).
 const BUZZ = { over: [380, 130, 380, 130, 380], near: [150, 120, 150], slow: [110, 90, 110, 90, 240] };
@@ -649,7 +689,7 @@ const SNAP_MPH = 0.05;
 const TICK_MS = 100;
 
 const gps = { mph: 0, at: NEVER, watch: null, failed: false };
-/** The latest reading's colour zone, and whether it's dimmed (no fresh fix behind it). */
+/** The latest reading's color zone, and whether it's dimmed (no fresh fix behind it). */
 const reading = { zone: Zone.OK, dim: true };
 let shownMph = -1;
 let targetMph = -1;
@@ -667,7 +707,7 @@ function onFix(position) {
   pill.setWarn(false);
   // Only the chip's own speed: working it out from positions is far too jumpy standing still.
   if (speed == null || Number.isNaN(speed) || speed < 0) {
-    setStatus('Waiting for GPS speed… it shows once you start moving.');
+    setStatus(t('status_wait_speed'));
     return;
   }
   setStatus('');
@@ -681,19 +721,17 @@ function onGpsError(error) {
     gps.failed = true;
     pill.setWarn(true);
     setStatus(
-      /iPhone|iPad|iPod/.test(navigator.userAgent)
-        ? 'Location is off for PacePod. Turn it on in Settings › Privacy & Security › Location Services › Safari Websites (While Using), then reload.'
-        : 'Location is off for this page. Allow it in the browser’s site settings, then reload.',
+      t(/iPhone|iPad|iPod/.test(navigator.userAgent) ? 'status_location_off_ios' : 'status_location_off'),
     );
   } else {
-    setStatus('Looking for GPS… outdoors with a clear sky works best.');
+    setStatus(t('status_looking_sky'));
   }
 }
 
 function startGps() {
   if (!('geolocation' in navigator)) {
     pill.setWarn(true);
-    setStatus('This browser can’t read your location.');
+    setStatus(t('status_no_geo'));
     return;
   }
   if (gps.watch != null) navigator.geolocation.clearWatch(gps.watch);
@@ -716,7 +754,7 @@ async function keepScreenOn() {
   }
 }
 
-/** Ten times a second: where the reading should be, its colour, and whether an alert is due. */
+/** Ten times a second: where the reading should be, its color, and whether an alert is due. */
 function tick() {
   const now = performance.now();
   const live = !gps.failed && now - gps.at <= GPS_FRESH_MS;
@@ -726,7 +764,7 @@ function tick() {
     return;
   }
   targetMph = gps.mph;
-  // The colour follows the real speed, not the glide.
+  // The color follows the real speed, not the glide.
   reading.zone = zoneOf(targetMph, settings);
   reading.dim = !live;
   alerts.check(targetMph, reading.zone, live, now);
@@ -760,7 +798,7 @@ const loop = {
       render();
     }
     pill.draw();
-    if (shownMph !== targetMph || pill.recolouring) {
+    if (shownMph !== targetMph || pill.recoloring) {
       requestAnimationFrame((n) => this.frame(n));
     } else {
       this.running = false;
@@ -780,7 +818,7 @@ function start() {
   alerts.unlock();
   startGps();
   keepScreenOn();
-  setStatus('Looking for GPS…');
+  setStatus(t('status_looking'));
   setInterval(tick, TICK_MS);
 }
 
@@ -960,13 +998,26 @@ for (const [id, key, kind] of [
   const button = document.getElementById(id);
   button.addEventListener('click', () => {
     alerts.unlock(); // a tap: lets the sound play
-    openChoices(button, SOUND_NAMES, settings[key], (i) => {
+    openChoices(button, soundNames(), settings[key], (i) => {
       settings[key] = i;
       save();
       alerts.play(kind, 'sound');
     });
   });
 }
+
+// Language: "Match phone" and the ten, each in its own words.
+const languageButton = document.getElementById('language');
+languageButton.addEventListener('click', () => {
+  const codes = ['system', ...LANGS.map(([code]) => code)];
+  const names = [t('language_system'), ...LANGS.map(([, name]) => name)];
+  openChoices(languageButton, names, Math.max(0, codes.indexOf(settings.language)), (i) => {
+    settings.language = codes[i];
+    save();
+    applyLanguage();
+    showSettings();
+  });
+});
 
 function speedLabel(mph) {
   return limitText(shown(mph, settings.kmh)) + ' ' + unitName(settings.kmh);
@@ -975,16 +1026,19 @@ function speedLabel(mph) {
 function showSettings() {
   const s = settings;
   const kmh = s.kmh;
-  document.getElementById('limitValue').textContent = s.limit > 0 ? speedLabel(s.limit) : 'Off';
+  document.getElementById('limitValue').textContent = s.limit > 0 ? speedLabel(s.limit) : t('limit_off');
   document.getElementById('warnValue').textContent = s.warnPercent + '%';
   document.getElementById('warnHint').textContent =
-    s.limit > 0 ? 'from ' + text(shown((s.limit * s.warnPercent) / 100, kmh), 1) + ' ' + unitName(kmh) : 'set a top speed first';
+    s.limit > 0 ? t('warn_from', text(shown((s.limit * s.warnPercent) / 100, kmh), 1), unitName(kmh)) : t('warn_needs_limit');
   document.getElementById('warnRow').classList.toggle('faded', s.limit <= 0);
-  document.getElementById('slowValue').textContent = s.slowBelow > 0 ? speedLabel(s.slowBelow) : 'Off';
+  document.getElementById('slowValue').textContent = s.slowBelow > 0 ? speedLabel(s.slowBelow) : t('limit_off');
   document.getElementById('fromValue').textContent = s.slowBelow > 0 ? speedLabel(slowFrom(s)) : '–';
   document.getElementById('fromRow').classList.toggle('faded', s.slowBelow <= 0);
-  document.getElementById('fastSound').textContent = SOUND_NAMES[s.fastSound] || SOUND_NAMES[0];
-  document.getElementById('slowSound').textContent = SOUND_NAMES[s.slowSound] || SOUND_NAMES[0];
+  const names = soundNames();
+  document.getElementById('fastSound').textContent = names[s.fastSound] || names[0];
+  document.getElementById('slowSound').textContent = names[s.slowSound] || names[0];
+  const picked = LANGS.find(([code]) => code === s.language);
+  document.getElementById('language').textContent = picked ? picked[1] : t('language_system');
   const sound = s.alertWith !== 'buzz';
   document.getElementById('fastSoundRow').hidden = !sound;
   document.getElementById('slowSoundRow').hidden = !sound;
@@ -997,6 +1051,7 @@ function showSettings() {
   }
 }
 
+applyLanguage();
 // The rounded font arrives a moment after the page; lay the pill out again once it has.
 pill.configure();
 showSettings();
