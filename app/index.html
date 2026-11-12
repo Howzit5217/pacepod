@@ -11,14 +11,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="PacePod">
   <!-- This version of the page; app.js reloads into a newer one. Bump it, and the ?v= below, with each release. -->
-  <meta name="pacepod-version" content="1.0.4">
+  <meta name="pacepod-version" content="1.0.4.1">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap">
-  <link rel="stylesheet" href="app.css?v=1.0.4">
+  <link rel="stylesheet" href="app.css?v=1.0.4.1">
 </head>
 <body>
   <main class="stage">
@@ -37,7 +37,26 @@
       <h1>PacePod</h1>
       <p data-t="start_text">Your speed, from your phone’s GPS. It stays on this phone and never goes anywhere.</p>
       <button id="startButton" class="green big" data-t="start">Start</button>
-      <p id="homeHint" class="hint" data-t-html="home_hint" hidden>Tip: tap <b>Share</b>, then <b>Add to Home Screen</b>, to open it full screen like an app.</p>
+    </div>
+  </div>
+
+  <!-- On iPhone it runs only from its Home Screen icon, full screen like an app (as Bloom Planner does): in a Safari
+       tab, this instead of the app (app.js). -->
+  <div id="install" class="overlay" hidden>
+    <div class="card install-card">
+      <img src="apple-touch-icon.png" alt="" class="start-icon">
+      <h1 data-t="install_title">Add PacePod to your Home Screen</h1>
+      <p data-t="install_text">PacePod runs from its own icon, full screen, like an app.</p>
+      <ol class="steps">
+        <li><span class="num">1</span><span class="step" data-t="install_safari">Open this page in Safari</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19zM12 10.9a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z"/></svg></li>
+        <li><span class="num">2</span><span class="step" data-t-html="install_share">Tap <b>Share</b></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6a2 2 0 0 1-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3a2 2 0 0 1 2 2z"/></svg></li>
+        <li><span class="num">3</span><span class="step" data-t-html="install_add">Tap <b>Add to Home Screen</b></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14zm-8-2h2v-4h4v-2h-4V7h-2v4H7v2h4z"/></svg></li>
+        <li><span class="num">4</span><span class="step" data-t="install_open">Open PacePod from the new icon</span>
+          <img src="apple-touch-icon.png" alt=""></li>
+      </ol>
     </div>
   </div>
 
@@ -120,7 +139,7 @@
   <!-- The sound drop-downs, in the app's look (a phone's own picker can't take it). -->
   <div id="choiceMenu" class="choice-menu" role="listbox" hidden></div>
 
-  <script src="i18n.js?v=1.0.4"></script>
-  <script src="app.js?v=1.0.4"></script>
+  <script src="i18n.js?v=1.0.4.1"></script>
+  <script src="app.js?v=1.0.4.1"></script>
 </body>
 </html>

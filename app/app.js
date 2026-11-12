@@ -876,10 +876,15 @@ document.addEventListener('visibilitychange', async () => {
 });
 window.addEventListener('resize', () => pill.fit());
 
-// iPhone in Safari (not opened from the home screen): say how to add it there.
+// On iPhone, PacePod runs only from its Home Screen icon, full screen like an app, as Bloom Planner does. In a Safari
+// tab it shows how to add it there instead of the app.
 const iOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const standalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
-document.getElementById('homeHint').hidden = !(iOS && !standalone);
+if (iOS && !standalone) {
+  startCard.hidden = true;
+  document.getElementById('gear').hidden = true;
+  document.getElementById('install').hidden = false;
+}
 
 // Settings: steppers that repeat while held, segmented choices, sound menus.
 

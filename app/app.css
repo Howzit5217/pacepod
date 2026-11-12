@@ -132,9 +132,78 @@ body {
   color: var(--muted);
 }
 
-.start-card .hint {
-  margin: 16px 0 0;
+.install-card {
+  padding: 28px 20px 20px;
+  text-align: center;
+}
+
+.install-card h1 {
+  margin: 10px 0 6px;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.install-card > p {
+  margin: 0 0 18px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.steps {
+  margin: 0;
+  padding: 2px 14px;
+  list-style: none;
+  text-align: left;
+  background: #fff;
+  border-radius: 22px;
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.steps li + li {
+  border-top: 1px solid var(--cream-dark);
+}
+
+.steps .num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--grass);
+  color: #fff;
   font-size: 13px;
+  font-weight: 800;
+}
+
+.steps .step {
+  flex: 1;
+}
+
+.steps svg {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  fill: var(--grass);
+}
+
+.steps img {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
 }
 
 .sheet-card {
