@@ -10,13 +10,15 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="PacePod">
+  <!-- This version of the page; app.js reloads into a newer one. Bump it, and the ?v= below, with each release. -->
+  <meta name="pacepod-version" content="1.0.4">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap">
-  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="app.css?v=1.0.4">
 </head>
 <body>
   <main class="stage">
@@ -118,7 +120,7 @@
   <!-- The sound drop-downs, in the app's look (a phone's own picker can't take it). -->
   <div id="choiceMenu" class="choice-menu" role="listbox" hidden></div>
 
-  <script src="i18n.js"></script>
-  <script src="app.js"></script>
+  <script src="i18n.js?v=1.0.4"></script>
+  <script src="app.js?v=1.0.4"></script>
 </body>
 </html>

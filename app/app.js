@@ -842,6 +842,38 @@ document.addEventListener('visibilitychange', () => {
   // Safari may have dropped GPS while the page was away; ask again.
   if (performance.now() - gps.at > GPS_FRESH_MS) startGps();
 });
+
+// ---- Staying up to date, as Bloom Planner's web version does. ----
+// On the home screen the page can stay open for days. Coming back to it, it looks for a newer version of the page
+// (at most every 10 minutes) and reloads into it: before Start, or after half an hour away, never mid-ride.
+
+const VERSION = document.querySelector('meta[name="pacepod-version"]')?.content ?? '';
+const UPDATE_EVERY_MS = 10 * 60_000;
+const AWAY_MS = 30 * 60_000;
+let updateCheckedAt = Date.now();
+let hiddenAt = 0;
+
+async function newerPage() {
+  try {
+    const res = await fetch('index.html', { cache: 'no-store' });
+    if (!res.ok) return false;
+    const theirs = (await res.text()).match(/name="pacepod-version" content="([^"]+)"/)?.[1];
+    return !!theirs && theirs !== VERSION;
+  } catch {
+    return false; // offline: next time
+  }
+}
+
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'hidden') {
+    hiddenAt = Date.now();
+    return;
+  }
+  if (!VERSION || Date.now() - updateCheckedAt < UPDATE_EVERY_MS) return;
+  if (started && Date.now() - hiddenAt < AWAY_MS) return;
+  updateCheckedAt = Date.now();
+  if (await newerPage()) window.location.reload();
+});
 window.addEventListener('resize', () => pill.fit());
 
 // iPhone in Safari (not opened from the home screen): say how to add it there.
