@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>PacePod</title>
-  <meta name="description" content="A little speedometer pill that floats over Pikmin Bloom while you ride. For Android, and on the web for iPhone.">
+  <meta name="description" content="A little speedometer pill that floats over Pikmin Bloom while you ride. For Android.">
   <meta name="theme-color" content="#56735D">
   <link rel="icon" href="favicon.png">
   <link rel="apple-touch-icon" href="icon.png">
@@ -104,17 +104,12 @@
     .button svg { width: 24px; height: 24px; fill: currentColor; }
 
     /*
-     * The buttons are made of the PacePod pill's own glass (see PillView in the app): tinted green, clearest under the
+     * The button is made of the PacePod pill's own glass (see PillView in the app): tinted green, clearest under the
      * shine and the glow, nearly solid in the middle, with a wash of light over the top third, a glow rising from the
-     * bottom edge and a fine line of light around it. The second is the frosted grey of the pill's top-speed bubble.
+     * bottom edge and a fine line of light around it.
      */
-    .button.green,
-    .button.soft {
-      color: #fff;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 14px rgba(20, 40, 28, 0.35);
-    }
-
     .button.green {
+      color: #fff;
       border: 1.5px solid rgba(82, 209, 143, 0.5);
       background: linear-gradient(rgba(45, 127, 79, 0.8) 0%, rgba(42, 120, 74, 0.78) 8%, rgba(31, 95, 58, 0.82) 32%,
         rgba(22, 90, 56, 0.92) 42%, rgba(19, 91, 58, 0.95) 55%, rgba(26, 116, 84, 0.92) 67%, rgba(30, 129, 96, 0.86) 77%,
@@ -124,15 +119,7 @@
       text-shadow: 0 1.1px 1.4px rgba(6, 42, 23, 0.55);
     }
 
-    .button.soft {
-      border: 1.5px solid rgba(255, 255, 255, 0.85);
-      background: radial-gradient(120% 140% at 50% 50%, rgba(160, 175, 170, 0.84) 0%, rgba(160, 175, 170, 0.9) 45%,
-        rgba(160, 175, 170, 0.94) 100%);
-      text-shadow: 0 0.6px 1.2px rgba(32, 48, 40, 0.6);
-    }
-
-    .button.green::after,
-    .button.soft::after {
+    .button.green::after {
       content: "";
       position: absolute;
       inset: 0 0 auto;
@@ -287,10 +274,6 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.65-.38l-1.86 3.22a11.5 11.5 0 0 0-9.86 0L5.2 5.92a.38.38 0 0 0-.65.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
         Download for Android
       </a>
-      <a class="button soft" href="app/">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.77-2.23a9.8 9.8 0 0 0 1.25-2.58c-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.64-.77 1.06-1.83.95-2.9-.91.04-2 .6-2.66 1.37-.58.67-1.1 1.75-.96 2.8 1.01.08 2.04-.51 2.67-1.27z"/></svg>
-        iPhone
-      </a>
     </div>
     <p class="version">Version 1.0.4 · <a href="https://github.com/Howzit5217/pacepod/releases">all versions</a></p>
   </header>
@@ -349,18 +332,6 @@
       <p class="note">On version 1.0.3 or older? Install this one over it once: your settings stay, and from then on it updates itself.</p>
     </section>
 
-    <section class="card" id="iphone">
-      <h2>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.97.9-3.77 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.77-2.23a9.8 9.8 0 0 0 1.25-2.58c-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.64-.77 1.06-1.83.95-2.9-.91.04-2 .6-2.66 1.37-.58.67-1.1 1.75-.96 2.8 1.01.08 2.04-.51 2.67-1.27z"/></svg>
-        iPhone
-      </h2>
-      <ol>
-        <li>Open <a href="app/"><b>PacePod for the web</b></a> in Safari.</li>
-        <li>Tap <b>Share</b>, then <b>Add to Home Screen</b>. It opens full screen with its own icon, like an app.</li>
-        <li>Tap <b>Start</b> and allow location.</li>
-      </ol>
-      <p class="note"><b>On iPhone it can’t float.</b> Apple doesn’t let any app or web page sit on top of other apps, and Safari stops reading your speed once you switch away. So on iPhone PacePod is a full-screen speedometer, with the same pill, colors and alerts, and it keeps your screen on while it’s open. Buzzing needs Android; on iPhone the alerts are sounds.</p>
-    </section>
 
     <p class="fine">PacePod is a fan-made tool. It isn’t made by, or affiliated with, Niantic or Nintendo. · <a href="https://github.com/Howzit5217/pacepod">GitHub</a></p>
   </main>

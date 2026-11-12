@@ -1,145 +1,16 @@
 <!doctype html>
+<!-- The iPhone web version was retired on 2026-11-11 (PacePod is Android only). An old Home Screen icon, or the web
+     version still open on a phone, lands on the download page instead: its update check sees a new version here. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="pacepod-version" content="retired">
+  <meta http-equiv="refresh" content="0; url=../">
   <title>PacePod</title>
-  <meta name="description" content="A little speedometer pill for riding with Pikmin Bloom.">
-  <meta name="theme-color" content="#56735D">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="PacePod">
-  <!-- This version of the page; app.js reloads into a newer one. Bump it, and the ?v= below, with each release. -->
-  <meta name="pacepod-version" content="1.0.4.1">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="favicon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap">
-  <link rel="stylesheet" href="app.css?v=1.0.4.1">
+  <link rel="canonical" href="https://howzit5217.github.io/pacepod/">
 </head>
 <body>
-  <main class="stage">
-    <canvas id="pill" role="img" data-t-aria="pill_description" aria-label="Speedometer"></canvas>
-    <p id="status" class="status" hidden></p>
-  </main>
-
-  <button id="gear" class="gear" data-t-aria="settings" aria-label="Settings">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.62l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.63-.94l-.36-2.54a.48.48 0 0 0-.48-.4h-3.84a.48.48 0 0 0-.48.4l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96a.49.49 0 0 0-.59.22L2.71 8.86a.48.48 0 0 0 .12.62l2.03 1.58a7.4 7.4 0 0 0 0 1.88l-2.03 1.58a.49.49 0 0 0-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54c.05.24.25.4.48.4h3.84c.24 0 .44-.16.48-.4l.36-2.54a7.03 7.03 0 0 0 1.63-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.62l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
-  </button>
-
-  <!-- First tap: Safari only asks for location, plays sound and keeps the screen on after one. -->
-  <div id="start" class="overlay">
-    <div class="card start-card">
-      <img src="apple-touch-icon.png" alt="" class="start-icon">
-      <h1>PacePod</h1>
-      <p data-t="start_text">Your speed, from your phone’s GPS. It stays on this phone and never goes anywhere.</p>
-      <button id="startButton" class="green big" data-t="start">Start</button>
-    </div>
-  </div>
-
-  <!-- On iPhone it runs only from its Home Screen icon, full screen like an app (as Bloom Planner does): in a Safari
-       tab, this instead of the app (app.js). -->
-  <div id="install" class="overlay" hidden>
-    <div class="card install-card">
-      <img src="apple-touch-icon.png" alt="" class="start-icon">
-      <h1 data-t="install_title">Add PacePod to your Home Screen</h1>
-      <p data-t="install_text">PacePod runs from its own icon, full screen, like an app.</p>
-      <ol class="steps">
-        <li><span class="num">1</span><span class="step" data-t="install_safari">Open this page in Safari</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19zM12 10.9a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z"/></svg></li>
-        <li><span class="num">2</span><span class="step" data-t-html="install_share">Tap <b>Share</b></span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zm4 5v11c0 1.1-.9 2-2 2H6a2 2 0 0 1-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3a2 2 0 0 1 2 2z"/></svg></li>
-        <li><span class="num">3</span><span class="step" data-t-html="install_add">Tap <b>Add to Home Screen</b></span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V5h14v14zm-8-2h2v-4h4v-2h-4V7h-2v4H7v2h4z"/></svg></li>
-        <li><span class="num">4</span><span class="step" data-t="install_open">Open PacePod from the new icon</span>
-          <img src="apple-touch-icon.png" alt=""></li>
-      </ol>
-    </div>
-  </div>
-
-  <div id="sheet" class="overlay" hidden>
-    <div class="card sheet-card" role="dialog" data-t-aria="settings" aria-label="Settings">
-      <div class="row title-row"><h2 data-t="speed_title">Speed</h2></div>
-      <div class="box">
-        <div class="row">
-          <span class="label" data-t="top_speed">Top speed</span>
-          <button class="round" id="limitMinus" data-t-aria="limit_down" aria-label="Lower top speed">−</button>
-          <span class="value" id="limitValue"></span>
-          <button class="round" id="limitPlus" data-t-aria="limit_up" aria-label="Raise top speed">+</button>
-        </div>
-        <div class="row" id="warnRow">
-          <span class="label"><span data-t="warn_at">Yellow at</span><small id="warnHint"></small></span>
-          <button class="round" id="warnMinus" data-t-aria="warn_down" aria-label="Turn yellow sooner">−</button>
-          <span class="value" id="warnValue"></span>
-          <button class="round" id="warnPlus" data-t-aria="warn_up" aria-label="Turn yellow later">+</button>
-        </div>
-      </div>
-      <div class="box">
-        <h3 data-t="too_slow">Too slow</h3>
-        <div class="row" id="fromRow">
-          <span class="label" data-t="slow_from">From</span>
-          <button class="round" id="fromMinus" data-t-aria="slow_from_down" aria-label="Start the slow zone lower">−</button>
-          <span class="value" id="fromValue"></span>
-          <button class="round" id="fromPlus" data-t-aria="slow_from_up" aria-label="Start the slow zone higher">+</button>
-        </div>
-        <div class="row">
-          <span class="label" data-t="slow_up_to">Up to</span>
-          <button class="round" id="slowMinus" data-t-aria="slow_down" aria-label="Lower the speed-up speed">−</button>
-          <span class="value" id="slowValue"></span>
-          <button class="round" id="slowPlus" data-t-aria="slow_up" aria-label="Raise the speed-up speed">+</button>
-        </div>
-      </div>
-      <div class="box">
-        <div class="row">
-          <span class="label" data-t="units">Units</span>
-          <div class="seg" data-key="kmh"><button data-v="false">mph</button><button data-v="true">km/h</button></div>
-        </div>
-        <div class="row">
-          <span class="label" data-t="decimals">Decimals</span>
-          <div class="seg" data-key="decimals"><button data-v="0">0</button><button data-v="1">0.0</button><button data-v="2">0.00</button></div>
-        </div>
-      </div>
-
-      <div class="row title-row">
-        <h2 data-t="alerts_title">Speed alerts</h2>
-        <div class="seg" data-key="alerts"><button data-v="false" data-t="off">Off</button><button data-v="true" data-t="on">On</button></div>
-      </div>
-      <p id="needSpeed" class="note" data-t="need_speed">Set a top speed, or a too-slow speed, for alerts to go by.</p>
-      <div class="box">
-        <div class="row" id="withRow">
-          <span class="label" data-t="alert_with">Alert with</span>
-          <div class="seg" data-key="alertWith"><button data-v="buzz" data-t="with_buzz">Buzz</button><button data-v="sound" data-t="with_sound">Sound</button><button data-v="both" data-t="with_both">Both</button></div>
-        </div>
-        <div class="row" id="fastSoundRow">
-          <span class="label" data-t="fast_sound_label">Too fast sound</span>
-          <button id="fastSound" class="soft dropdown" aria-haspopup="listbox" data-t-aria="fast_sound_label" aria-label="Too fast sound"></button>
-        </div>
-        <div class="row">
-          <span class="label" data-t="alert_yellow">Also at yellow</span>
-          <div class="seg" data-key="atYellow"><button data-v="false" data-t="off">Off</button><button data-v="true" data-t="on">On</button></div>
-        </div>
-        <div class="row" id="slowSoundRow">
-          <span class="label" data-t="slow_sound_label">Too slow sound</span>
-          <button id="slowSound" class="soft dropdown" aria-haspopup="listbox" data-t-aria="slow_sound_label" aria-label="Too slow sound"></button>
-        </div>
-      </div>
-      <div class="box">
-        <div class="row">
-          <span class="label" data-t="language_label">Language</span>
-          <button id="language" class="soft dropdown" aria-haspopup="listbox" data-t-aria="language_label" aria-label="Language"></button>
-        </div>
-      </div>
-      <div class="done-row"><button id="done" class="green" data-t="done">Done</button></div>
-    </div>
-  </div>
-
-  <!-- The sound drop-downs, in the app's look (a phone's own picker can't take it). -->
-  <div id="choiceMenu" class="choice-menu" role="listbox" hidden></div>
-
-  <script src="i18n.js?v=1.0.4.1"></script>
-  <script src="app.js?v=1.0.4.1"></script>
+  <p><a href="../">PacePod is now on Android only. Get it here.</a></p>
 </body>
 </html>
